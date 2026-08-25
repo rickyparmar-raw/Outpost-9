@@ -1,0 +1,7 @@
+.godot/
+*.import
+*.tmp
+*.log
+*.md
+!README.md
+*.uid
