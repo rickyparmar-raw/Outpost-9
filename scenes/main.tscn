@@ -1,0 +1,276 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/station.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/crewmate.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/generator.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/escape_pod.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/blast_door.tscn" id="7"]
+[ext_resource type="FontFile" path="res://assets/fonts/Monocraft.ttf" id="8"]
+[ext_resource type="Shader" path="res://assets/shaders/post_fx.gdshader" id="9"]
+
+[sub_resource type="StyleBoxFlat" id="sb_board"]
+content_margin_left = 28.0
+content_margin_top = 22.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.03, 0.04, 0.07, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.65, 0.2, 0.9)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="ShaderMaterial" id="fx_mat"]
+shader = ExtResource("9")
+shader_parameter/vignette_strength = 0.45
+shader_parameter/scanline_strength = 0.08
+shader_parameter/noise_strength = 0.035
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Station" type="Node2D" parent="."]
+script = ExtResource("2")
+
+[node name="BlastDoor" parent="." instance=ExtResource("7")]
+position = Vector2(1088, 752)
+
+[node name="Player" parent="." instance=ExtResource("3")]
+position = Vector2(688, 528)
+
+[node name="Marcus" parent="." instance=ExtResource("4")]
+position = Vector2(624, 496)
+crew_name = "Marcus"
+role = "Engineer"
+texture_path = "res://assets/sprites/characters/crew_engineer.png"
+
+[node name="Elena" parent="." instance=ExtResource("4")]
+position = Vector2(784, 496)
+crew_name = "Elena"
+role = "Scientist"
+texture_path = "res://assets/sprites/characters/crew_scientist.png"
+
+[node name="Jax" parent="." instance=ExtResource("4")]
+position = Vector2(688, 432)
+crew_name = "Jax"
+role = "Security"
+texture_path = "res://assets/sprites/characters/crew_security.png"
+
+[node name="Generator1" parent="." instance=ExtResource("5")]
+position = Vector2(240, 848)
+wp_key = "eng"
+
+[node name="Generator2" parent="." instance=ExtResource("5")]
+position = Vector2(1168, 112)
+wp_key = "sec"
+
+[node name="Generator3" parent="." instance=ExtResource("5")]
+position = Vector2(688, 112)
+wp_key = "gen3"
+
+[node name="EscapePod" parent="." instance=ExtResource("6")]
+position = Vector2(1184, 848)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.17, 0.18, 0.26, 1)
+
+[node name="PostFX" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="FX" type="ColorRect" parent="PostFX"]
+material = SubResource("fx_mat")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="ObjectiveLabel" type="Label" parent="UI"]
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 520.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(0.95, 0.8, 0.35, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 20
+text = "GENERATORS ONLINE: 0/3"
+
+[node name="ControlsLabel" type="Label" parent="UI"]
+offset_left = 24.0
+offset_top = 50.0
+offset_right = 720.0
+offset_bottom = 70.0
+theme_override_colors/font_color = Color(0.6, 0.63, 0.72, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 12
+text = "[WASD] MOVE   [E] INTERACT   [F] SCAN   [Q] ELIMINATE"
+
+[node name="ScannerLabel" type="Label" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -420.0
+offset_top = 18.0
+offset_right = -24.0
+offset_bottom = 46.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.45, 0.9, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 20
+text = "SCANNER [3/3]"
+horizontal_alignment = 2
+
+[node name="LogLabel" type="Label" parent="UI"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -118.0
+offset_right = -24.0
+offset_bottom = -84.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.92, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 18
+text = ""
+horizontal_alignment = 1
+
+[node name="ScanPopup" type="Label" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -380.0
+offset_top = 108.0
+offset_right = 380.0
+offset_bottom = 150.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 26
+text = "SCAN RESULT"
+horizontal_alignment = 1
+
+[node name="BoardPanel" type="PanelContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -310.0
+offset_top = -180.0
+offset_right = 310.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("sb_board")
+
+[node name="VBox" type="VBoxContainer" parent="UI/BoardPanel"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="BoardTitle" type="Label" parent="UI/BoardPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.8, 0.35, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 22
+text = "ESCAPE POD — SELECT SURVIVORS"
+horizontal_alignment = 1
+
+[node name="BoardInfo" type="Label" parent="UI/BoardPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 16
+text = ""
+horizontal_alignment = 1
+
+[node name="BoardFooter" type="Label" parent="UI/BoardPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.58, 0.68, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 12
+text = "[1-3] TOGGLE CREW    [ENTER] LAUNCH    [ESC] STAND DOWN"
+horizontal_alignment = 1
+
+[node name="EndingScreen" type="ColorRect" parent="UI"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.93)
+
+[node name="Center" type="CenterContainer" parent="UI/EndingScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBox" type="VBoxContainer" parent="UI/EndingScreen/Center"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="EndingTitle" type="Label" parent="UI/EndingScreen/Center/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 40
+text = "ENDING"
+horizontal_alignment = 1
+
+[node name="EndingBody" type="Label" parent="UI/EndingScreen/Center/VBox"]
+custom_minimum_size = Vector2(680, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.9, 0.95, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 17
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="EndingHint" type="Label" parent="UI/EndingScreen/Center/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.53, 0.62, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("8")
+theme_override_font_sizes/font_size = 13
+text = "[R] RESTART    [ESC] TITLE"
+horizontal_alignment = 1
